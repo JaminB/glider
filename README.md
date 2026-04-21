@@ -1,8 +1,11 @@
 # glider
 
+[![npm](https://img.shields.io/npm/v/@jaminb/glider)](https://www.npmjs.com/package/@jaminb/glider)
+[![license](https://img.shields.io/npm/l/@jaminb/glider)](https://github.com/JaminB/glider/blob/master/LICENSE)
+
 Conway's Game of Life rendered as a subtle canvas background animation. Live cells are connected by thin lines; the simulation evolves slowly, leaving fading trails.
 
-**[Live demo →](https://jaminb.github.io/glider/)**
+**[Live demo →](https://jaminb.github.io/glider/)** · **[npm →](https://www.npmjs.com/package/@jaminb/glider)**
 
 ## Install
 
@@ -13,7 +16,7 @@ npm install @jaminb/glider
 ## Usage
 
 ```ts
-import { init } from 'glider';
+import { init } from '@jaminb/glider';
 
 const canvas = document.getElementById('bg') as HTMLCanvasElement;
 const instance = init(canvas);

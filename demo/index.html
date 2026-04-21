@@ -7,26 +7,158 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; }
+
     canvas { position: fixed; inset: 0; }
+
     .label {
       position: fixed;
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
-      color: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.18);
       font-family: monospace;
       font-size: 0.75rem;
       letter-spacing: 0.1em;
+      pointer-events: none;
     }
+
+    /* ── toggle button ── */
+    #toggle {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 10;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      font-family: monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      padding: 0.4rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    #toggle:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+
+    /* ── panel ── */
+    #panel {
+      position: fixed;
+      top: 3.5rem;
+      right: 1.25rem;
+      z-index: 10;
+      width: 260px;
+      background: rgba(10,10,10,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.45);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    #panel.open { display: flex; }
+
+    .group-label {
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.12em;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 0.3rem;
+    }
+    .group-label:first-child { margin-top: 0; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 110px 1fr 36px;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .row label { color: rgba(255,255,255,0.4); white-space: nowrap; }
+    .row .val  { color: rgba(255,255,255,0.6); text-align: right; }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(100,160,255,0.8);
+      cursor: pointer;
+    }
+    input[type=range]:hover { background: rgba(255,255,255,0.2); }
   </style>
 </head>
 <body>
   <canvas id="bg"></canvas>
+
+  <button id="toggle">controls</button>
+
+  <div id="panel">
+    <div class="group-label">simulation</div>
+    <div class="row"><label>cell size</label>      <input type="range" id="cellSize"           min="4"    max="40"   step="1"      value="16"  /><span class="val" id="v-cellSize">16</span></div>
+    <div class="row"><label>gen interval</label>   <input type="range" id="generationInterval" min="1"    max="30"   step="1"      value="8"   /><span class="val" id="v-generationInterval">8</span></div>
+    <div class="row"><label>seed density</label>   <input type="range" id="seedDensity"        min="0.05" max="0.6"  step="0.01"   value="0.18"/><span class="val" id="v-seedDensity">0.18</span></div>
+    <div class="row"><label>reseed at</label>      <input type="range" id="reseedThreshold"    min="0.01" max="0.15" step="0.01"   value="0.04"/><span class="val" id="v-reseedThreshold">0.04</span></div>
+
+    <div class="group-label">rendering</div>
+    <div class="row"><label>fade alpha</label>     <input type="range" id="fadeAlpha"  min="0.02" max="0.8"  step="0.01" value="0.22"/><span class="val" id="v-fadeAlpha">0.22</span></div>
+    <div class="row"><label>line alpha</label>     <input type="range" id="lineAlpha"  min="0.05" max="1"    step="0.05" value="0.45"/><span class="val" id="v-lineAlpha">0.45</span></div>
+    <div class="row"><label>dot alpha</label>      <input type="range" id="dotAlpha"   min="0.05" max="1"    step="0.05" value="0.5" /><span class="val" id="v-dotAlpha">0.5</span></div>
+    <div class="row"><label>line width</label>     <input type="range" id="lineWidth"  min="0.2"  max="4"    step="0.1"  value="0.6" /><span class="val" id="v-lineWidth">0.6</span></div>
+    <div class="row"><label>dot radius</label>     <input type="range" id="dotRadius"  min="0.2"  max="4"    step="0.1"  value="0.8" /><span class="val" id="v-dotRadius">0.8</span></div>
+
+    <div class="group-label">color</div>
+    <div class="row"><label>hue base</label>       <input type="range" id="hueBase"    min="0"    max="360"  step="1"    value="210"/><span class="val" id="v-hueBase">210</span></div>
+    <div class="row"><label>hue range</label>      <input type="range" id="hueRange"   min="0"    max="90"   step="1"    value="35" /><span class="val" id="v-hueRange">35</span></div>
+    <div class="row"><label>hue speed</label>      <input type="range" id="hueSpeed"   min="0"    max="0.02" step="0.001" value="0.004"/><span class="val" id="v-hueSpeed">0.004</span></div>
+    <div class="row"><label>saturation</label>     <input type="range" id="saturation" min="0"    max="100"  step="1"    value="60" /><span class="val" id="v-saturation">60</span></div>
+    <div class="row"><label>lightness</label>      <input type="range" id="lightness"  min="20"   max="95"   step="1"    value="68" /><span class="val" id="v-lightness">68</span></div>
+  </div>
+
   <div class="label">glider — conway's game of life</div>
+
   <script type="module">
     import { init } from './index.mjs';
+
     const canvas = document.getElementById('bg');
-    init(canvas);
+    const glider = init(canvas);
+
+    // toggle panel
+    const panel = document.getElementById('panel');
+    document.getElementById('toggle').addEventListener('click', () => {
+      panel.classList.toggle('open');
+    });
+
+    // wire up every slider
+    const numericKeys = [
+      'cellSize', 'generationInterval', 'seedDensity', 'reseedThreshold',
+      'fadeAlpha', 'lineAlpha', 'dotAlpha', 'lineWidth', 'dotRadius',
+      'hueBase', 'hueRange', 'hueSpeed', 'saturation', 'lightness',
+    ];
+
+    for (const key of numericKeys) {
+      const input = document.getElementById(key);
+      const display = document.getElementById(`v-${key}`);
+      input.addEventListener('input', () => {
+        const val = parseFloat(input.value);
+        display.textContent = input.value;
+        glider.update({ [key]: val });
+      });
+    }
   </script>
 </body>
 </html>

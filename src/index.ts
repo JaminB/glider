@@ -215,6 +215,17 @@ export class Glider {
     this.raf = requestAnimationFrame(() => this.loop());
   }
 
+  /**
+   * Update configuration at runtime. Changes take effect on the next frame.
+   * Changing cellSize or backgroundColor triggers a full grid resize and re-seed.
+   */
+  update(config: Partial<GliderConfig>): void {
+    const needsResize = config.cellSize !== undefined || config.backgroundColor !== undefined;
+    Object.assign(this.cfg, config);
+    if (config.backgroundColor) this.bgRgb = hexToRgb(this.cfg.backgroundColor);
+    if (needsResize) this.resize();
+  }
+
   /** Stop the animation and remove the resize listener. */
   destroy() {
     cancelAnimationFrame(this.raf);

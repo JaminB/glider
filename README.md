@@ -2,6 +2,8 @@
 
 Conway's Game of Life rendered as a subtle canvas background animation. Live cells are connected by thin lines; the simulation evolves slowly, leaving fading trails.
 
+**[Live demo →](https://jaminb.github.io/glider/)**
+
 ## Install
 
 ```bash

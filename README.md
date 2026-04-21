@@ -11,20 +11,20 @@ Conway's Game of Life rendered as a subtle canvas background animation. Live cel
 
 ## About the simulation
 
-John Conway invented the Game of Life in 1970. It's a zero-player game — you set the initial state, then step back and watch. Conway reportedly found it mildly irritating that this became his most famous contribution to mathematics. That says something about what it is.
+John Conway invented the Game of Life in 1970, which sounds like a productivity tool and is the opposite. It's a zero-player game: you arrange some cells, hit go, and watch. Conway reportedly found it embarrassing that this became his most famous work. Understandable.
 
-The rules are four sentences:
+The rules fit on a napkin:
 
-- A live cell with fewer than 2 neighbors dies. *(Loneliness.)*
-- A live cell with 2 or 3 neighbors survives.
-- A live cell with more than 3 neighbors dies. *(Overcrowding.)*
-- A dead cell with exactly 3 neighbors becomes alive. *(Critical mass.)*
+- Fewer than 2 live neighbors? The cell dies. *(Lonely.)*
+- 2 or 3 live neighbors? It survives. *(Just right.)*
+- More than 3 live neighbors? It dies. *(Too crowded.)*
+- Dead cell with exactly 3 neighbors? It comes back. *(Democracy.)*
 
-That's it. No hidden mechanics, no randomness after the seed. Those four rules applied simultaneously to every cell on an infinite grid, repeated forever.
+Four rules. No randomness after the seed, no exceptions. Applied to every cell simultaneously, forever.
 
-What comes out the other side is unreasonable: stable structures, oscillators that pulse indefinitely, patterns that travel across the grid, patterns that generate *other* patterns, and eventually — with enough patience — Turing-complete computation. All of it from four if-statements.
+From that you get stable structures, oscillators, things that move, things that build other things, and eventually full Turing-complete computation. People have built working CPUs in this thing. It's a lot.
 
-The glider (what this package is named after) is the simplest moving pattern: five cells that slide one step diagonally every four generations. It was the first structure Conway's group found that could travel indefinitely, which is why it became the unofficial emblem of hacker culture.
+The glider is the simplest pattern that moves: five cells that creep one step diagonally every four generations. Conway's group found it shortly after inventing the game. It's what this package is named after.
 
 ## Install
 

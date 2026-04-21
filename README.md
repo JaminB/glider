@@ -7,6 +7,23 @@ Conway's Game of Life rendered as a subtle canvas background animation. Live cel
 
 **[Live demo →](https://jaminb.github.io/glider/)** · **[npm →](https://www.npmjs.com/package/@jaminb/glider)**
 
+## About the simulation
+
+John Conway invented the Game of Life in 1970. It's a zero-player game — you set the initial state, then step back and watch. Conway reportedly found it mildly irritating that this became his most famous contribution to mathematics. That says something about what it is.
+
+The rules are four sentences:
+
+- A live cell with fewer than 2 neighbors dies. *(Loneliness.)*
+- A live cell with 2 or 3 neighbors survives.
+- A live cell with more than 3 neighbors dies. *(Overcrowding.)*
+- A dead cell with exactly 3 neighbors becomes alive. *(Critical mass.)*
+
+That's it. No hidden mechanics, no randomness after the seed. Those four rules applied simultaneously to every cell on an infinite grid, repeated forever.
+
+What comes out the other side is unreasonable: stable structures, oscillators that pulse indefinitely, patterns that travel across the grid, patterns that generate *other* patterns, and eventually — with enough patience — Turing-complete computation. All of it from four if-statements.
+
+The glider (what this package is named after) is the simplest moving pattern: five cells that slide one step diagonally every four generations. It was the first structure Conway's group found that could travel indefinitely, which is why it became the unofficial emblem of hacker culture.
+
 ## Install
 
 ```bash

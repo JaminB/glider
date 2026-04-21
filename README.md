@@ -7,7 +7,7 @@ Conway's Game of Life rendered as a subtle canvas background animation. Live cel
 ## Install
 
 ```bash
-npm install glider
+npm install @jaminb/glider
 ```
 
 ## Usage
